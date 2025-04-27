@@ -38,6 +38,16 @@ async def get_trending_news(category: str = "general", country: str = "us"):
         logger.error(f"Error fetching news: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/api/news/article-content")
+async def get_article_content(url: str):
+    """Get full content of a news article"""
+    try:
+        content = await news_service.get_article_content(url)
+        return {"status": "success", "content": content}
+    except Exception as e:
+        logger.error(f"Error fetching article content: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/api/content/video-ideas")
 async def generate_video_ideas(request: Dict = Body(...)):
     """Generate video ideas based on news headlines"""
